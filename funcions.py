@@ -120,49 +120,55 @@ def calcul2(entre_eixos, planta_rampa, h_final, a_max_morro, a_max_centre, morro
 
 
 def crear_pdf(nom, autor, resultat):
-    file_dst = os.path.join(os.environ['USERPROFILE'], 'Downloads', f'informe_{nom}.pdf')
-    c = canvas.Canvas(file_dst, pagesize=(595.27, 841.89))  # A4 pagesize
-    c.setFillColor(colors.gray)
-    c.rect(10, 775, 550, 20, stroke=0, fill=1)
-    titul = c.beginText(50, 780)
-    titul.setFont('Helvetica', 16)
-    titul.setFillColor(colors.black)
-    titul.textLine(f"Informe {nom}  creat per: {autor}")
-    c.drawText(titul)
-    c.setFont("Helvetica", 12)
-    c.drawString(500, 760, f"{date.today().strftime(' %d/%m/%Y')}")
-    c.drawString(50, 750, " Dades rampa original")
+    try:
+        file_dst = os.path.join(os.environ['USERPROFILE'], 'Downloads', f'informe_{nom}.pdf')
+        # c = canvas.Canvas(file_dst, pagesize=(595.27, 841.89))  # A4 pagesize
 
-    image = "./static/rampa.png"
-    c.drawInlineImage(image, 50, 645, width=200, height=100)
-    c.line(10, 740, 555, 740)
-    c.drawString(330, 710, f"L = {session['rampa_l']}  mm")
-    c.drawString(330, 690, f"H = {session['rampa_h']} mm")
-    c.drawString(330, 670, f"X = {session['rampa_x']} mm")
+        pdf_filename = os.path.join('static', 'informe.pdf')
+        c = canvas.Canvas(pdf_filename, pagesize=(595.27, 841.89))  # A4 pagesize
+        c.setFillColor(colors.gray)
+        c.rect(10, 775, 550, 20, stroke=0, fill=1)
+        titul = c.beginText(50, 780)
+        titul.setFont('Helvetica', 16)
+        titul.setFillColor(colors.black)
+        titul.textLine(f"Informe {nom}  creat per: {autor}")
+        c.drawText(titul)
+        c.setFont("Helvetica", 12)
+        c.drawString(500, 760, f"{date.today().strftime(' %d/%m/%Y')}")
+        c.drawString(50, 750, " Dades rampa original")
 
-    c.drawString(50, 640, "Dades cotxe")
-    cotxe = "./static/cotxe1.png"
-    c.drawInlineImage(cotxe, 20, 500, width=279, height=128)
-    c.line(10, 630, 555, 630)
-    c.drawString(330, 610, f"B = {session['cotxe_b']} mm")
-    c.drawString(330, 590, f"P = {session['cotxe_p']} mm")
-    c.drawString(330, 570, f"EC = {session['cotxe_ec']} mm")
-    c.drawString(330, 550, f"H = {session['cotxe_h']} mm")
-    c.drawString(330, 530, f"M = {session['cotxe_m']} mm")
-    c.drawString(330, 510, f"A = {session['cotxe_a']} mm")
-    c.drawString(330, 490, f"Marge seguretat = {session['cotxe_ms']} mm")
-    c.drawString(50, 470, "Resultats")
-    resultats = "./static/solucio2.png"
-    c.drawInlineImage(resultats, 20, 320, width=300, height=133)
-    c.line(10, 460, 555, 460)
-    punt_x_inici = 330
-    punt_y_inici = 420
-    for row in resultat:
-        c.drawString(punt_x_inici, punt_y_inici, f"L{row[0]} = {row[2]} mm")
-        c.drawString(punt_x_inici + 100, punt_y_inici, f"H{row[0]} = {row[1]} mm")
-        punt_y_inici -= 20
-    # finish page
-    c.showPage()
-    # construct and save file to .pdf
-    c.save()
-    return
+        image = "./static/rampa.png"
+        c.drawInlineImage(image, 50, 645, width=200, height=100)
+        c.line(10, 740, 555, 740)
+        c.drawString(330, 710, f"L = {session['rampa_l']}  mm")
+        c.drawString(330, 690, f"H = {session['rampa_h']} mm")
+        c.drawString(330, 670, f"X = {session['rampa_x']} mm")
+
+        c.drawString(50, 640, "Dades cotxe")
+        cotxe = "./static/cotxe1.png"
+        c.drawInlineImage(cotxe, 20, 500, width=279, height=128)
+        c.line(10, 630, 555, 630)
+        c.drawString(330, 610, f"B = {session['cotxe_b']} mm")
+        c.drawString(330, 590, f"P = {session['cotxe_p']} mm")
+        c.drawString(330, 570, f"EC = {session['cotxe_ec']} mm")
+        c.drawString(330, 550, f"H = {session['cotxe_h']} mm")
+        c.drawString(330, 530, f"M = {session['cotxe_m']} mm")
+        c.drawString(330, 510, f"A = {session['cotxe_a']} mm")
+        c.drawString(330, 490, f"Marge seguretat = {session['cotxe_ms']} mm")
+        c.drawString(50, 470, "Resultats")
+        resultats = "./static/solucio2.png"
+        c.drawInlineImage(resultats, 20, 320, width=300, height=133)
+        c.line(10, 460, 555, 460)
+        punt_x_inici = 330
+        punt_y_inici = 420
+        for row in resultat:
+            c.drawString(punt_x_inici, punt_y_inici, f"L{row[0]} = {row[2]} mm")
+            c.drawString(punt_x_inici + 100, punt_y_inici, f"H{row[0]} = {row[1]} mm")
+            punt_y_inici -= 20
+        # finish page
+        c.showPage()
+        # construct and save file to .pdf
+        c.save()
+        return c
+    except:
+        return False

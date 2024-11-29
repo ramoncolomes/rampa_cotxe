@@ -1,8 +1,8 @@
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, url_for, send_file
 from flask_session import Session
 from funcions import calcul2, crear_pdf
 from math import atan
-
+import os
 # Configure application
 app = Flask(__name__)
 
@@ -130,8 +130,13 @@ def resultats():
             nom = request.form.get("nom")
             autor = request.form.get("autor")
             # crear el pdf
-            crear_pdf(nom, autor, session['calcul'])
-            flash("informe creat")
+            r = crear_pdf(nom, autor, session['calcul'])
+            if r:
+                flash("informe creat")
+                return redirect(url_for('descargar_pdf'))
+            else:
+                flash("No disponible en la versió web")
+            # return render_template("pdf_file.html", c=c)
         if request.form.get('calcular') == "calcular":
             # calcular
             ret = calculs_resultats()
@@ -156,6 +161,16 @@ def resultats():
             return redirect('rampa')
         return render_template('resultats.html')
     return render_template('resultats.html')
+
+
+@app.route('/descargar-pdf')
+def descargar_pdf():
+    # Ruta completa del archivo PDF
+    pdf_filename = os.path.join('static/informe.pdf')
+
+    # Devuelve el PDF al usuario para que pueda descargarlo.
+    a = send_file(pdf_filename, as_attachment=False, mimetype='application/pdf')
+    return a
 
 
 def calculs_resultats():
