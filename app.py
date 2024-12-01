@@ -136,7 +136,7 @@ def resultats():
                 return redirect(url_for('descargar_pdf'))
             else:
                 flash("No disponible en la versió web")
-            # return render_template("pdf_file.html", c=c)
+
         if request.form.get('calcular') == "calcular":
             # calcular
             ret = calculs_resultats()

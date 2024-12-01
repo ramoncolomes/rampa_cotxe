@@ -169,6 +169,6 @@ def crear_pdf(nom, autor, resultat):
         c.showPage()
         # construct and save file to .pdf
         c.save()
-        return c
+        return True
     except:
         return False
